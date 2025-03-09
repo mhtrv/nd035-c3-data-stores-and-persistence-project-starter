@@ -6,6 +6,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -28,17 +29,28 @@ public class PetController {
 
     @GetMapping("/{petId}")
     public PetDTO getPet(@PathVariable long petId) {
-        throw new UnsupportedOperationException();
+
+        return convertPetToPetDTO(petService.findPetById(petId));
     }
 
     @GetMapping
     public List<PetDTO> getPets(){
-        throw new UnsupportedOperationException();
+        List<Pet> pets = petService.getAllPets();
+        List<PetDTO> petDTOS = new ArrayList<>();
+        for (Pet pet:pets){
+            petDTOS.add(convertPetToPetDTO(pet));
+        }
+        return petDTOS;
     }
 
     @GetMapping("/owner/{ownerId}")
     public List<PetDTO> getPetsByOwner(@PathVariable long ownerId) {
-        throw new UnsupportedOperationException();
+        List <Pet> pets = petService.findAllPetsByOwnerId(ownerId);
+        List<PetDTO> petDTOS = new ArrayList<>();
+        for(Pet pet:pets){
+            petDTOS.add(convertPetToPetDTO(pet));
+        }
+        return petDTOS;
     }
 
     private Pet convertPetDTOToPet(PetDTO petDTO){

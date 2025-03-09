@@ -1,5 +1,7 @@
 package com.udacity.jdnd.course3.critter.user;
 
+import com.udacity.jdnd.course3.critter.pet.Pet;
+import com.udacity.jdnd.course3.critter.pet.PetService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -25,6 +27,9 @@ public class UserController {
     @Autowired
     private EmployeeService employeeService;
 
+    @Autowired
+    private PetService petService;
+
     @PostMapping("/customer")
     public CustomerDTO saveCustomer(@RequestBody CustomerDTO customerDTO){
         Long id = customerService.save(convertCustomerDTOToCustomer(customerDTO));
@@ -44,7 +49,8 @@ public class UserController {
 
     @GetMapping("/customer/pet/{petId}")
     public CustomerDTO getOwnerByPet(@PathVariable long petId){
-        throw new UnsupportedOperationException();
+        Long ownerId = petService.findPetById(petId).getOwner().getId();
+        return convertCustomerToCustomerDTO(customerService.findCustomerById(ownerId));
     }
 
     @PostMapping("/employee")
@@ -81,6 +87,13 @@ public class UserController {
     private CustomerDTO convertCustomerToCustomerDTO(Customer customer){
         CustomerDTO customerDTO = new CustomerDTO();
         BeanUtils.copyProperties(customer,customerDTO);
+        List<Long> petIds = new ArrayList<>();
+        if(customer.getPets()!=null){
+            for(Pet pet:customer.getPets()){
+                petIds.add(pet.getId());
+            }
+        }
+        customerDTO.setPetIds(petIds);
         return customerDTO;
     }
 

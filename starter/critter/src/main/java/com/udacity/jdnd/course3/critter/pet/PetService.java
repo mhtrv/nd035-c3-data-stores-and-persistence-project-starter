@@ -4,6 +4,8 @@ import com.udacity.jdnd.course3.critter.user.Customer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class PetService {
 
@@ -18,4 +20,11 @@ public class PetService {
         return petRepository.findById(id).orElse(null);
     }
 
+    public List<Pet> getAllPets(){
+        return petRepository.findAll();
+    }
+
+    public List<Pet> findAllPetsByOwnerId(Long ownerId){
+        return petRepository.findAllByOwnerId(ownerId);
+    }
 }
