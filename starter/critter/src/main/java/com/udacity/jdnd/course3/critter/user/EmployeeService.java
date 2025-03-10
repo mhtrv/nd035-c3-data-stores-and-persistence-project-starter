@@ -3,6 +3,8 @@ package com.udacity.jdnd.course3.critter.user;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class EmployeeService {
     @Autowired
@@ -14,5 +16,9 @@ public class EmployeeService {
 
     public Employee findEmployeeById(Long id){
         return employeeRepository.findById(id).orElse(null);
+    }
+
+    public List<Employee> findEmployeesByIds(List<Long> ids){
+        return employeeRepository.findAllById(ids);
     }
 }
