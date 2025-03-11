@@ -2,9 +2,11 @@ package com.udacity.jdnd.course3.critter.user;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.time.DayOfWeek;
 import java.util.List;
-
+import java.util.Set;
 @Service
 public class EmployeeService {
     @Autowired
@@ -20,5 +22,9 @@ public class EmployeeService {
 
     public List<Employee> findEmployeesByIds(List<Long> ids){
         return employeeRepository.findAllById(ids);
+    }
+
+    public List<Employee> findEmployeesForService(Set<EmployeeSkill> skills, DayOfWeek daysAvailable){
+        return employeeRepository.findEmployeeBySkillsAndDaysAvailable(skills, daysAvailable);
     }
 }

@@ -2,6 +2,7 @@ package com.udacity.jdnd.course3.critter.schedule;
 
 import com.udacity.jdnd.course3.critter.pet.Pet;
 import com.udacity.jdnd.course3.critter.pet.PetService;
+import com.udacity.jdnd.course3.critter.user.CustomerService;
 import com.udacity.jdnd.course3.critter.user.Employee;
 import com.udacity.jdnd.course3.critter.user.EmployeeService;
 import org.springframework.beans.BeanUtils;
@@ -34,22 +35,45 @@ public class ScheduleController {
 
     @GetMapping
     public List<ScheduleDTO> getAllSchedules() {
-        throw new UnsupportedOperationException();
+        List<Schedule> schedules = scheduleService.getAllSchedules();
+        List<ScheduleDTO> scheduleDTOS = new ArrayList<>();
+        for (Schedule schedule:schedules){
+            scheduleDTOS.add(convertScheduleToScheduleDTO(schedule));
+        }
+        return scheduleDTOS;
     }
 
     @GetMapping("/pet/{petId}")
     public List<ScheduleDTO> getScheduleForPet(@PathVariable long petId) {
-        throw new UnsupportedOperationException();
+        Pet pet = petService.findPetById(petId);
+        List<Schedule> schedules = scheduleService.getSchedulesForPet(pet);
+        List<ScheduleDTO> scheduleDTOS = new ArrayList<>();
+        for (Schedule schedule:schedules){
+            scheduleDTOS.add(convertScheduleToScheduleDTO(schedule));
+        }
+        return scheduleDTOS;
     }
 
     @GetMapping("/employee/{employeeId}")
     public List<ScheduleDTO> getScheduleForEmployee(@PathVariable long employeeId) {
-        throw new UnsupportedOperationException();
+        Employee employee = employeeService.findEmployeeById(employeeId);
+        List<Schedule> schedules = scheduleService.getSchedulesForEmployee(employee);
+        List<ScheduleDTO> scheduleDTOS = new ArrayList<>();
+        for (Schedule schedule:schedules){
+            scheduleDTOS.add(convertScheduleToScheduleDTO(schedule));
+        }
+        return scheduleDTOS;
     }
 
     @GetMapping("/customer/{customerId}")
     public List<ScheduleDTO> getScheduleForCustomer(@PathVariable long customerId) {
-        throw new UnsupportedOperationException();
+        List<Pet> pets = petService.findAllPetsByOwnerId(customerId);
+        List<Schedule>schedules =scheduleService.getSchedulesForPets(pets);
+        List<ScheduleDTO> scheduleDTOS = new ArrayList<>();
+        for (Schedule schedule:schedules){
+            scheduleDTOS.add(convertScheduleToScheduleDTO(schedule));
+        }
+        return scheduleDTOS;
     }
 
     private Schedule convertScheduleDTOToSchedule(ScheduleDTO scheduleDTO){
