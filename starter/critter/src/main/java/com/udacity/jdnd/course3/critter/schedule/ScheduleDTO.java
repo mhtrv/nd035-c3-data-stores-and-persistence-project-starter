@@ -10,7 +10,7 @@ import java.util.Set;
  * Represents the form that schedule request and response data takes. Does not map
  * to the database directly.
  */
-public class ScheduleDTO {
+public class ScheduleDTO implements Comparable {
     private long id;
     private List<Long> employeeIds;
     private List<Long> petIds;
@@ -56,4 +56,11 @@ public class ScheduleDTO {
     public void setActivities(Set<EmployeeSkill> activities) {
         this.activities = activities;
     }
+
+    @Override
+    public int compareTo(Object o) {
+        ScheduleDTO otherSchedule = (ScheduleDTO) o;
+        return this.getDate().compareTo(otherSchedule.getDate());
+    }
+
 }

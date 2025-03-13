@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.DayOfWeek;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -76,10 +77,15 @@ public class UserController {
 
     @GetMapping("/employee/availability")
     public List<EmployeeDTO> findEmployeesForService(@RequestBody EmployeeRequestDTO employeeDTO) {
-        List<Employee> employees = employeeService.findEmployeesForService(employeeDTO.getSkills(),employeeDTO.getDate().getDayOfWeek());
+        Set<Employee>employees= new HashSet<>();
+        for(EmployeeSkill skill:employeeDTO.getSkills()){
+            employees.addAll(employeeService.findEmployeesForService(skill,employeeDTO.getDate().getDayOfWeek()));
+        }
         List<EmployeeDTO>employeeDTOS=new ArrayList<>();
         for(Employee employee:employees){
-            employeeDTOS.add(convertEmployeeToEmployeeDTO(employee));
+            if(employee.getSkills().containsAll(employeeDTO.getSkills())){
+                employeeDTOS.add(convertEmployeeToEmployeeDTO(employee));
+            }
         }
         return employeeDTOS;
     }

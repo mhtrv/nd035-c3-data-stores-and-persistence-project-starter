@@ -9,10 +9,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Handles web requests related to Schedules.
@@ -80,6 +77,7 @@ public class ScheduleController {
         for (Schedule schedule:schedules){
             scheduleDTOS.add(convertScheduleToScheduleDTO(schedule));
         }
+        Collections.sort(scheduleDTOS);
         return scheduleDTOS;
     }
 
