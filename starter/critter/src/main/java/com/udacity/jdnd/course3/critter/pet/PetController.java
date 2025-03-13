@@ -7,7 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Handles web requests related to Pets.
@@ -24,6 +26,26 @@ public class PetController {
     @PostMapping
     public PetDTO savePet(@RequestBody PetDTO petDTO) {
         Long id = petService.save(convertPetDTOToPet(petDTO));
+        Pet pet1=petService.findPetById(id);
+        Customer owner = customerService.findCustomerById(pet1.getOwner().getId());
+        Boolean bool = false;
+        List<Pet> pets =owner.getPets();
+        if(pets != null){
+            for(Pet pet: pets){
+                if(pet.getId()==id){
+                    bool = true;
+                    break;
+                }
+            }
+        }
+        if(!bool){
+            if(pets == null){
+                pets = new ArrayList<>();
+            }
+            pets.add(pet1);
+            owner.setPets(pets);
+            customerService.save(owner);
+        }
         return convertPetToPetDTO(petService.findPetById(id));
     }
 

@@ -10,7 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Handles web requests related to Schedules.
@@ -68,7 +70,12 @@ public class ScheduleController {
     @GetMapping("/customer/{customerId}")
     public List<ScheduleDTO> getScheduleForCustomer(@PathVariable long customerId) {
         List<Pet> pets = petService.findAllPetsByOwnerId(customerId);
-        List<Schedule>schedules =scheduleService.getSchedulesForPets(pets);
+        Set<Schedule> schedules = new HashSet<>();
+        for(Pet pet:pets){
+            schedules.addAll(scheduleService.getSchedulesForPet(pet));
+
+        }
+
         List<ScheduleDTO> scheduleDTOS = new ArrayList<>();
         for (Schedule schedule:schedules){
             scheduleDTOS.add(convertScheduleToScheduleDTO(schedule));

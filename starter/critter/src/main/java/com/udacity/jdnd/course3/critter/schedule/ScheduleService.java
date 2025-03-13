@@ -31,8 +31,4 @@ public class ScheduleService {
     public List<Schedule> getSchedulesForEmployee(Employee employee){
         return scheduleRepository.findAllByEmployees(employee);
     }
-
-    public List<Schedule> getSchedulesForPets(List<Pet> pets){
-        return scheduleRepository.findAllByPets(pets);
-    }
 }
